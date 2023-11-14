@@ -1,20 +1,24 @@
 /* eslint-disable no-unused-vars */
-import React, {PureComponent} from 'react';
-import {render} from 'react-dom';
+import React, { PureComponent } from "react";
+import { render } from "react-dom";
 
-import DeckGL from '@deck.gl/react';
-import {COORDINATE_SYSTEM, OrbitView, LinearInterpolator} from '@deck.gl/core';
-import {PointCloudLayer} from '@deck.gl/layers';
+import DeckGL from "@deck.gl/react";
+import {
+  COORDINATE_SYSTEM,
+  OrbitView,
+  LinearInterpolator,
+} from "@deck.gl/core";
+import { PointCloudLayer } from "@deck.gl/layers";
 
-import {DracoLoader} from '@loaders.gl/draco';
-import {LASLoader} from '@loaders.gl/las';
-import {PLYLoader} from '@loaders.gl/ply';
-import {PCDLoader} from '@loaders.gl/pcd';
-import {OBJLoader} from '@loaders.gl/obj';
-import {load, registerLoaders} from '@loaders.gl/core';
+import { DracoLoader } from "@loaders.gl/draco";
+import { LASLoader } from "@loaders.gl/las";
+import { PLYLoader } from "@loaders.gl/ply";
+import { PCDLoader } from "@loaders.gl/pcd";
+import { OBJLoader } from "@loaders.gl/obj";
+import { load, registerLoaders } from "@loaders.gl/core";
 
-import ControlPanel from './components/control-panel';
-import FILE_INDEX from './file-index';
+import ControlPanel from "./components/control-panel";
+import FILE_INDEX from "./file-index";
 
 // Additional format support can be added here, see
 registerLoaders([DracoLoader, LASLoader, PLYLoader, PCDLoader, OBJLoader]);
@@ -23,14 +27,14 @@ const INITIAL_VIEW_STATE = {
   target: [0, 0, 0],
   rotationX: 0,
   rotationOrbit: 0,
-  orbitAxis: 'Y',
+  orbitAxis: "Y",
   fov: 50,
   minZoom: 0,
   maxZoom: 10,
-  zoom: 1
+  zoom: 1,
 };
 
-const transitionInterpolator = new LinearInterpolator(['rotationOrbit']);
+const transitionInterpolator = new LinearInterpolator(["rotationOrbit"]);
 
 // basic helper method to calculate a models upper and lower bounds
 function calculateBounds(attributes) {
@@ -55,12 +59,12 @@ function calculateBounds(attributes) {
     else if (z > maxs[2]) maxs[2] = z;
   }
 
-  return {mins, maxs};
+  return { mins, maxs };
 }
 
 function convertLoadersMeshToDeckPointCloudData(attributes) {
   const deckAttributes = {
-    getPosition: attributes.POSITION
+    getPosition: attributes.POSITION,
   };
   if (attributes.COLOR_0) {
     deckAttributes.getColor = attributes.COLOR_0;
@@ -68,7 +72,7 @@ function convertLoadersMeshToDeckPointCloudData(attributes) {
   // Check PointCloudLayer docs for other supported props?
   return {
     length: attributes.POSITION.value.length / attributes.POSITION.size,
-    attributes: deckAttributes
+    attributes: deckAttributes,
   };
 }
 
@@ -80,8 +84,8 @@ export default class App extends PureComponent {
       viewState: INITIAL_VIEW_STATE,
       pointData: null,
       // control panel
-      selectedExample: 'Richmond Azaelias',
-      selectedCategory: 'PLY'
+      selectedExample: "Richmond Azaelias",
+      selectedCategory: "PLY",
     };
 
     this._onLoad = this._onLoad.bind(this);
@@ -90,20 +94,20 @@ export default class App extends PureComponent {
     this._onExampleChange = this._onExampleChange.bind(this);
   }
 
-  _onViewStateChange({viewState}) {
-    this.setState({viewState});
+  _onViewStateChange({ viewState }) {
+    this.setState({ viewState });
   }
 
   _rotateCamera() {
-    const {viewState} = this.state;
+    const { viewState } = this.state;
     this.setState({
       viewState: {
         ...viewState,
         rotationOrbit: viewState.rotationOrbit + 10,
         transitionDuration: 600,
         transitionInterpolator,
-        onTransitionEnd: this._rotateCamera
-      }
+        onTransitionEnd: this._rotateCamera,
+      },
     });
   }
 
@@ -114,28 +118,32 @@ export default class App extends PureComponent {
       this._loadStartMs = Date.now();
       this.setState({
         selectedCategory: file.name,
-        selectedExample: '',
+        selectedExample: "",
         pointData: null,
-        loadTimeMs: undefined
+        loadTimeMs: undefined,
       });
       load(file, LASLoader).then(this._onLoad.bind(this));
     }
   }
 
-  _onLoad({header, loaderData, attributes, progress}) {
+  _onLoad({ header, loaderData, attributes, progress }) {
     // metadata from LAZ file header
-    const {maxs, mins} =
+    const { maxs, mins } =
       loaderData.header?.mins && loaderData.header?.maxs
         ? loaderData.header
         : calculateBounds(attributes);
 
-    let {viewState} = this.state;
+    let { viewState } = this.state;
 
     // File contains bounding box info
     viewState = {
       ...INITIAL_VIEW_STATE,
-      target: [(mins[0] + maxs[0]) / 2, (mins[1] + maxs[1]) / 2, (mins[2] + maxs[2]) / 2],
-      zoom: Math.log2(window.innerWidth / (maxs[0] - mins[0])) - 1
+      target: [
+        (mins[0] + maxs[0]) / 2,
+        (mins[1] + maxs[1]) / 2,
+        (mins[2] + maxs[2]) / 2,
+      ],
+      zoom: Math.log2(window.innerWidth / (maxs[0] - mins[0])) - 1,
     };
 
     this.setState(
@@ -146,14 +154,14 @@ export default class App extends PureComponent {
         // Proposal: Consider adding a `mesh.points` or `mesh.pointcloud` option to mesh loaders
         // in which case the loader throws away indices and just return the vertices?
         pointData: convertLoadersMeshToDeckPointCloudData(attributes),
-        viewState
+        viewState,
       },
       this._rotateCamera
     );
   }
 
   _renderLayers() {
-    const {pointData, selectedExample} = this.state;
+    const { pointData, selectedExample } = this.state;
 
     return [
       pointData &&
@@ -165,13 +173,14 @@ export default class App extends PureComponent {
           getNormal: [0, 1, 0],
           getColor: [255, 255, 255],
           opacity: 0.5,
-          pointSize: 0.5
-        })
+          pointSize: 0.5,
+        }),
     ];
   }
 
   _renderControlPanel() {
-    const {selectedExample, pointData, selectedCategory, loadTimeMs} = this.state;
+    const { selectedExample, pointData, selectedCategory, loadTimeMs } =
+      this.state;
     return (
       <ControlPanel
         examples={FILE_INDEX}
@@ -185,20 +194,22 @@ export default class App extends PureComponent {
   }
 
   render() {
-    const {viewState} = this.state;
+    const { viewState } = this.state;
     // eslint-disable-next-line react/prop-types
-    const {panel = true} = this.props;
+    const { panel = true } = this.props;
     return (
-      <div style={{position: 'relative', height: '100%'}}>
-        <div style={{visibility: panel ? 'default' : 'hidden'}}>{this._renderControlPanel()}</div>
+      <div style={{ position: "relative", height: "100%" }}>
+        <div style={{ visibility: panel ? "default" : "hidden" }}>
+          {this._renderControlPanel()}
+        </div>
         <DeckGL
           views={new OrbitView()}
           viewState={viewState}
-          controller={{inertia: true}}
+          controller={{ inertia: true }}
           onViewStateChange={this._onViewStateChange}
           layers={this._renderLayers()}
           parameters={{
-            clearColor: [0.07, 0.14, 0.19, 1]
+            clearColor: [0.07, 0.14, 0.19, 1],
           }}
         />
       </div>
