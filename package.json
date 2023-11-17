@@ -23,10 +23,13 @@
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react-swc": "^3.4.1",
     "prop-types": "^15.7.2",
-    "react": "^16.3.0",
+    "react": "^18.2.0",
     "react-3d-viewer": "^1.0.12",
-    "react-dom": "^16.3.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1",
+    "react-three-fiber": "^6.0.13",
     "styled-components": "^4.2.0",
+    "three": "^0.158.0",
     "vite-plugin-svgr": "^4.1.0"
   },
   "devDependencies": {

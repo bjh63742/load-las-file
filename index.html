@@ -1,29 +1,20 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta charset='UTF-8' />
-    <title>las file 로더</title>
-    <style>
-      body {
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 13px;
-        -webkit-font-smoothing: antialiased;
-        margin:0;
-        padding:0;
-        overflow:hidden;
-        width: 100vw;
-        height: 100vh;
-      }
-      #app {
-        height: 100%;
-      }
-    </style>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="파일 로드 테스트" />
+    <title>파일로드 테스트</title>
   </head>
   <body>
-    <div id="app"></div>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/index.jsx"></script>
   </body>
-  <script type="module">
-    import {renderToDOM} from './app.jsx';
-    renderToDOM(document.getElementById('app'));
-  </script>
 </html>

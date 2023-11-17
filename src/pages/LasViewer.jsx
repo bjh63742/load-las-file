@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React, { PureComponent } from "react";
-import { render } from "react-dom";
 
 import DeckGL from "@deck.gl/react";
 import {
@@ -17,8 +16,8 @@ import { PCDLoader } from "@loaders.gl/pcd";
 import { OBJLoader } from "@loaders.gl/obj";
 import { load, registerLoaders } from "@loaders.gl/core";
 
-import ControlPanel from "./components/control-panel";
-import FILE_INDEX from "./file-index";
+import ControlPanel from "../components/control-panel";
+import FILE_INDEX from "../file-index";
 
 // Additional format support can be added here, see
 registerLoaders([DracoLoader, LASLoader, PLYLoader, PCDLoader, OBJLoader]);
@@ -76,7 +75,7 @@ function convertLoadersMeshToDeckPointCloudData(attributes) {
   };
 }
 
-export default class App extends PureComponent {
+export default class LasViewer extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -198,7 +197,7 @@ export default class App extends PureComponent {
     // eslint-disable-next-line react/prop-types
     const { panel = true } = this.props;
     return (
-      <div style={{ position: "relative", height: "100%" }}>
+      <div style={{ position: "relative", height: "100vh" }}>
         <div style={{ visibility: panel ? "default" : "hidden" }}>
           {this._renderControlPanel()}
         </div>
@@ -215,8 +214,4 @@ export default class App extends PureComponent {
       </div>
     );
   }
-}
-
-export function renderToDOM(container) {
-  render(<App />, container);
 }
