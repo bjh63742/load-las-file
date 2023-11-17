@@ -21,7 +21,7 @@ const LogoutRouter = createBrowserRouter([
   },
   {
     path: "/objectViewer",
-    element: <ObjectViewer2 />,
+    element: <ObjectViewer />,
   },
   {
     path: "*",
