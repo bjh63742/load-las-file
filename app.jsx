@@ -122,7 +122,7 @@ export default class App extends PureComponent {
         pointData: null,
         loadTimeMs: undefined,
       });
-      load(file, LASLoader).then(this._onLoad.bind(this));
+      load(file).then(this._onLoad.bind(this));
     }
   }
 
