@@ -21,18 +21,20 @@ export default function ObjectViewer() {
         }}
       />
       {file && (
-        <OBJModel
-          key={file}
-          width={width}
-          height={height}
-          // position={{ x: 0, y: -100, z: 0 }}
-          scale={{ x: 0.25, y: 0.25, z: 0.25 }}
-          src={file}
-          // model={file}
-          onload={() => {
-            console.log("loaded");
-          }}
-        />
+        <div style={{ marginTop: "100px" }}>
+          <OBJModel
+            key={file}
+            width={width}
+            height={height}
+            position={{ x: 0, y: 0, z: 0 }}
+            scale={{ x: 0.5, y: 0.5, z: 0.5 }}
+            src={file}
+            // model={file}
+            onload={() => {
+              console.log("loaded");
+            }}
+          />
+        </div>
       )}
     </div>
   );
